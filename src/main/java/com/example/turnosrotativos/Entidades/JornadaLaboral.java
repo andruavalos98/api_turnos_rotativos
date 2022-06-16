@@ -1,7 +1,5 @@
 package com.example.turnosrotativos.Entidades;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import javax.persistence.*;
 import java.util.Date;
 
@@ -14,12 +12,12 @@ public class JornadaLaboral {
     private Integer id;
 
     @ManyToOne
-     private Empleado empleado;
+    private Empleado empleado;
     @ManyToOne
-     private TipoDeJornadaLaboral tipoDeJornadaLaboral;
-     private Date fecha;
-     private Date horaEntrada;
-     private Date horaSalida;
+    private TipoDeJornadaLaboral tipoDeJornadaLaboral;
+    private Date fecha;
+    private Date horaEntrada;
+    private Date horaSalida;
 
     public Empleado getEmpleado() {
         return empleado;

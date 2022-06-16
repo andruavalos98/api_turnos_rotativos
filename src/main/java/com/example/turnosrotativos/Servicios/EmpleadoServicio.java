@@ -1,37 +1,42 @@
 package com.example.turnosrotativos.Servicios;
 
 import com.example.turnosrotativos.Entidades.Empleado;
+import com.example.turnosrotativos.Repositorios.EmpleadoRepositorio;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class EmpleadoServicio {
 
     public ArrayList<Empleado> listaEmpleados = new ArrayList<>();
 
-    Empleado empleado = new Empleado();
+    @Autowired
+    private EmpleadoRepositorio repositorio;
 
-    @PostMapping()
-    public void altaEmpleado(int id, String nombre){
-        empleado.setId(id);
-        empleado.setNombre(nombre);
+    private Empleado entidad;
 
 
-        listaEmpleados.add(empleado);
+ // Creo una nueva instancia de un empleado y seteo un nombre
+    public void crearEmpleado(Empleado empleado) {
+        this.entidad.setNombre(empleado.getNombre());
+
+        this.repositorio.save(this.entidad);
+    }
+
+    public void bajaEmpleado() {
+        this.entidad.setAlta(false);
+    }
+
+    public void modificarEmpleado() {
 
     }
 
-    public void bajaEmpleado(){
-        empleado.setAlta(false);
+    public List<Empleado> getAll(){
+        return this.repositorio.findAll();
     }
 
-    public void modificarEmpleado(){
 
-    }
 
-    public void eliminarEmpleado(){
-        empleado.setAlta(false);
-    }
 }

@@ -1,7 +1,6 @@
 package com.example.turnosrotativos.Entidades;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 
 @Entity
 public class TipoDeJornadaLaboral {

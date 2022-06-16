@@ -1,9 +1,6 @@
 package com.example.turnosrotativos.Entidades;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import javax.persistence.*;
-import java.util.ArrayList;
 
 @Entity
 public class Empleado {
