@@ -6,37 +6,37 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmpleadoServicio {
-
-    public ArrayList<Empleado> listaEmpleados = new ArrayList<>();
-
     @Autowired
     private EmpleadoRepositorio repositorio;
 
+    @Autowired
     private Empleado entidad;
 
-
- // Creo una nueva instancia de un empleado y seteo un nombre
-    public void crearEmpleado(Empleado empleado) {
-        this.entidad.setNombre(empleado.getNombre());
-
-        this.repositorio.save(this.entidad);
+    public List<Empleado> getAll(){
+        return this.repositorio.findAll();
     }
 
-    public void bajaEmpleado() {
-        this.entidad.setAlta(false);
+    public Optional<Empleado> getById(Integer id) {
+        return this.repositorio.findById(id);
+    }
+
+    // Creo una nueva instancia de un empleado y seteo un nombre
+    public void crearEmpleado(Empleado empleado) {
+//        this.entidad.setNombre(empleado.getNombre());
+
+        this.repositorio.save(empleado);
     }
 
     public void modificarEmpleado() {
 
     }
 
-    public List<Empleado> getAll(){
-        return this.repositorio.findAll();
+    public void bajaEmpleado() {
+        this.entidad.setAlta(false);
     }
-
-
 
 }

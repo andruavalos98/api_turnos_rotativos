@@ -1,8 +1,11 @@
 package com.example.turnosrotativos.Entidades;
 
+import org.springframework.stereotype.Component;
+
 import javax.persistence.*;
 
 @Entity
+@Component
 public class Empleado {
 
     @Id
