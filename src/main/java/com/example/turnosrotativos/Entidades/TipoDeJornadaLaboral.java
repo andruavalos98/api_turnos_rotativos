@@ -1,7 +1,10 @@
 package com.example.turnosrotativos.Entidades;
 
+import org.springframework.stereotype.Component;
+
 import javax.persistence.*;
 
+@Component
 @Entity
 public class TipoDeJornadaLaboral {
 
@@ -12,7 +15,17 @@ public class TipoDeJornadaLaboral {
     private Integer id;
     private String nombre;
 
-    private boolean alta;
+    private boolean alta = true;
+
+    public TipoDeJornadaLaboral(Integer id, String nombre, boolean alta) {
+        this.id = id;
+        this.nombre = nombre;
+        this.alta = alta;
+    }
+
+    public TipoDeJornadaLaboral() {
+
+    }
 
     public boolean isAlta() {
         return alta;
@@ -32,5 +45,9 @@ public class TipoDeJornadaLaboral {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getId() {
+        return id;
     }
 }
