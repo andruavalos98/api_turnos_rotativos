@@ -40,9 +40,4 @@ public class EmpleadoControlador {
         return ResponseEntity.ok(empleado.get());
     }
 
-//    @PatchMapping("")
-//    public ResponseEntity getById(@RequestBody Empleado empleado) {
-//        return ResponseEntity.ok(this.empleadoServicio.modificarEmpleado(empleado));
-//    }
-
 }

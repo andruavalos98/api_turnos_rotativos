@@ -26,7 +26,7 @@ public class EmpleadoServicio {
 
     // Creo una nueva instancia de un empleado y seteo un nombre
     public void crearEmpleado(Empleado empleado) {
-//        this.entidad.setNombre(empleado.getNombre());
+        this.entidad.setNombre(empleado.getNombre());
 
         this.repositorio.save(empleado);
     }
