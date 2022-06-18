@@ -10,6 +10,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
@@ -89,9 +90,29 @@ public class JornadaLaboralServicio {
     }
 
     private boolean esCantidadDeHorasTrabajadasValidasPorDia(JornadaLaboral jornada) {
-//        List<JornadaLaboral> jornadasDelEmpleadoEnElDia = this.jornadaLaboralRepositorio.
+        // Si el empleado esta de vacaciones, no importa las horas que se le sumen al dia
+        if (!this.empleadoNoEstaDeVacacionesNiDiaLibre(jornada)) {
+            return true;
+        }
 
-        return true;
+        // Todos las jornadas del empleado en el dia
+        List<JornadaLaboral> jornadasDelEmpleadoEnElDia = this.jornadaLaboralRepositorio.findJornadaLaboralByEmpleadoIdAndFecha(jornada.getEmpleado().getId(), jornada.getFecha());
+
+        // Jornadas del empleado en el dia sin tener en cuenta dia libre ni vacaciones
+        List<JornadaLaboral> jornadaLaboralesEnElDia = jornadasDelEmpleadoEnElDia.stream()
+                .filter(elemento -> this.empleadoNoEstaDeVacacionesNiDiaLibre(elemento))
+                .collect(Collectors.toList());
+
+        long horasTrabajadasEnElDia = 0;
+        long horasASumar = this.obtenerDuracionDeJornada(jornada);
+
+        // Sumo todas las horas de trabajo en el dia
+        for (int i = 0; i < jornadaLaboralesEnElDia.size(); i++) {
+            horasTrabajadasEnElDia += this.obtenerDuracionDeJornada(jornadaLaboralesEnElDia.get(i));
+        }
+
+        // Sumo las horas que ya tiene planeadas mas las nuevas y verifico que no superen las 12
+        return horasTrabajadasEnElDia + horasASumar <= 12;
     }
 
     private boolean esCantidadDeHorasTrabajadasValidasPorSemana(JornadaLaboral jornada) {
@@ -122,6 +143,10 @@ public class JornadaLaboralServicio {
 
     private long obtenerDuracionDeJornada(JornadaLaboral jornada) {
         return ChronoUnit.HOURS.between(jornada.getHoraEntrada(), jornada.getHoraSalida());
+    }
+
+    private boolean empleadoNoEstaDeVacacionesNiDiaLibre(JornadaLaboral jornada) {
+        return !jornada.getTipoDeJornadaLaboral().getId().equals(ID_DIA_LIBRE) && !jornada.getTipoDeJornadaLaboral().getId().equals(ID_VACACIONES);
     }
 
 }
