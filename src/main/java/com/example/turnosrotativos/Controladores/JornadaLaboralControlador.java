@@ -37,7 +37,7 @@ public class JornadaLaboralControlador {
     @PostMapping("/crear")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity addJornadaLaboral(@RequestBody JornadaLaboral nuevaJornada){
-//        return ResponseEntity.ok(this.crearJornadaLaboralValidadorServicio.diasLibresDeLaSemana(nuevaJornada));
+//        return ResponseEntity.ok(this.crearJornadaLaboralValidadorServicio.obtenerJornadasEnELMismoTurno(nuevaJornada));
 
         // Valido la nuevaJornada
         ErrorResponse errorDeValidacion = this.crearJornadaLaboralValidadorServicio.validarJornada(nuevaJornada);

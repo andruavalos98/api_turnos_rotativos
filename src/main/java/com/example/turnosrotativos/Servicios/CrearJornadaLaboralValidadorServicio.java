@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.WeekFields;
@@ -90,8 +91,12 @@ public class CrearJornadaLaboralValidadorServicio {
     }
 
     private boolean esCantidadDeHorasTrabajadasValidasPorSemana(JornadaLaboral nuevaJornada) {
+        if(!this.empleadoNoEstaDeVacacionesNiDiaLibre(nuevaJornada)) {
+            return true;
+        }
+
         // Pbtengo los dias trabjados del empleado
-        List<JornadaLaboral> jornadasLaboralesDeLaSemana = this.obtenerJornadasLaboralesDeLaSemana(nuevaJornada);
+        List<JornadaLaboral> jornadasLaboralesDeLaSemana = this.obtenerJornadasLaboralesDeLaSemanaParaUnEmpleado(nuevaJornada);
 
         long horasTrabajadasEnLaSemana = this.obtenerHorasTrabajadasDeUnaLista(jornadasLaboralesDeLaSemana);
 
@@ -104,20 +109,23 @@ public class CrearJornadaLaboralValidadorServicio {
     }
 
     private boolean esCantidadDeEmpleadosValidaParaElTurno(JornadaLaboral nuevaJornada) {
-//        List<JornadaLaboral> jornadasLaboralesDeLaSemana = this.obtenerJornadasLaboralesDeLaSemana(nuevaJornada);
-//
-//        jornadasLaboralesDeLaSemana.stream()
-//                .filter(jornada -> {
-//                    jornada.getHoraEntrada().i
-//                })
-//
-//        int cantidadDeEmpleadosEnElTurno =
-//
-//        for (int i = 0; i < ; i++) {
-//
-//        }
+        if(!this.empleadoNoEstaDeVacacionesNiDiaLibre(nuevaJornada)) {
+            return true;
+        }
 
-        return true;
+        // Obtengo todas las jornadas laborales en la semana
+        List<JornadaLaboral> jornadasLaboralesDeLaSemana = this.obtenerTodasLasJornadasLaboralesEnUnaSemana(nuevaJornada);
+
+        // Considero que dos jornadas estan en el mismo turno si se superponen en algun punto
+        List<JornadaLaboral> jornadasEnElMismoTurno = jornadasLaboralesDeLaSemana.stream()
+                .filter(jornada -> {
+                    return !jornada.getEmpleado().getId().equals(nuevaJornada.getId()) &&
+                            (this.unaHoraEstaEntre(nuevaJornada.getHoraEntrada(), jornada.getHoraEntrada(), jornada.getHoraSalida()) ||
+                             this.unaHoraEstaEntre(nuevaJornada.getHoraSalida(), jornada.getHoraEntrada(), jornada.getHoraSalida()));
+                })
+                .collect(Collectors.toList());
+
+        return jornadasEnElMismoTurno.size() <= 2;
     }
 
     private boolean empleadoNoTieneDiaLibre(JornadaLaboral nuevaJornada) {
@@ -168,7 +176,7 @@ public class CrearJornadaLaboralValidadorServicio {
         return totalDeHorasTrabajadas;
     }
 
-    private List<JornadaLaboral> obtenerJornadasLaboralesDeLaSemana(JornadaLaboral nuevaJornada) {
+    private List<JornadaLaboral> obtenerJornadasLaboralesDeLaSemanaParaUnEmpleado(JornadaLaboral nuevaJornada) {
         // Obtengo el primer y el ultimo dia de la semana de la jornada a ingresar
         final DayOfWeek firstDayOfWeek = WeekFields.of(Locale.getDefault()).getFirstDayOfWeek();
         final DayOfWeek lastDayOfWeek = DayOfWeek.of(((firstDayOfWeek.getValue() + 5) % DayOfWeek.values().length) + 1);
@@ -184,6 +192,28 @@ public class CrearJornadaLaboralValidadorServicio {
 
         // Pbtengo los dias trabjados del empleado
         return this.filtrarPorDiasTrabajados(jornadasDeLaSemana);
+    }
+
+    private List<JornadaLaboral> obtenerTodasLasJornadasLaboralesEnUnaSemana(JornadaLaboral nuevaJornada) {
+        // Obtengo el primer y el ultimo dia de la semana de la jornada a ingresar
+        final DayOfWeek firstDayOfWeek = WeekFields.of(Locale.getDefault()).getFirstDayOfWeek();
+        final DayOfWeek lastDayOfWeek = DayOfWeek.of(((firstDayOfWeek.getValue() + 5) % DayOfWeek.values().length) + 1);
+        // Busco el primer dia de la semana
+        LocalDate primerDiaDeLaSemana = nuevaJornada.getFecha().with(TemporalAdjusters.previousOrSame(firstDayOfWeek));
+        // Busco el ultimo dia de la semana
+        LocalDate ultimoDiaDeLaSemana = nuevaJornada.getFecha().with(TemporalAdjusters.nextOrSame(lastDayOfWeek));
+
+        // Encuentro todas las jornadas de la semana
+        List<JornadaLaboral> jornadasDeLaSemana = this.jornadaLaboralRepositorio.findJornadaLaboralByFechaBetween(primerDiaDeLaSemana, ultimoDiaDeLaSemana);
+
+        // Filtro todas las jornadas que no sean vacaciones ni dias libres y retorno
+        return jornadasDeLaSemana.stream()
+                .filter(jornada -> this.empleadoNoEstaDeVacacionesNiDiaLibre(jornada))
+                .collect(Collectors.toList());
+    }
+
+    private boolean unaHoraEstaEntre(LocalTime horaAComparar, LocalTime horaInicio, LocalTime horaFin) {
+        return horaInicio.compareTo(horaAComparar) <= 0 && horaFin.compareTo(horaAComparar) >= 0;
     }
 
 }
