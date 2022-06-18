@@ -34,10 +34,14 @@ public class JornadaLaboralControlador {
         return jornadaLaboralServicio.getJornadaLaboralById(id).get();
     }
 
+    @GetMapping("listar/horas-cargadas-por-jornada")
+    public ResponseEntity getHorasDeCadaTipoPorEmpleado() {
+        return ResponseEntity.ok(this.jornadaLaboralServicio.getHorasCargadasPorCadaTipoDeJornadaParaTodosLosEmpleados());
+    }
+
     @PostMapping("/crear")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity addJornadaLaboral(@RequestBody JornadaLaboral nuevaJornada){
-//        return ResponseEntity.ok(this.crearJornadaLaboralValidadorServicio.obtenerJornadasEnELMismoTurno(nuevaJornada));
 
         // Valido la nuevaJornada
         ErrorResponse errorDeValidacion = this.crearJornadaLaboralValidadorServicio.validarJornada(nuevaJornada);
