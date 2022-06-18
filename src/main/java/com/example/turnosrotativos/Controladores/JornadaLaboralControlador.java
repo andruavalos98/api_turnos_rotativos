@@ -37,7 +37,7 @@ public class JornadaLaboralControlador {
     @PostMapping("/crear")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity addJornadaLaboral(@RequestBody JornadaLaboral nuevaJornada){
-//        return ResponseEntity.ok(this.crearJornadaLaboralValidadorServicio.encontrarEmpleadoConDiaLibre(nuevaJornada));
+//        return ResponseEntity.ok(this.crearJornadaLaboralValidadorServicio.diasLibresDeLaSemana(nuevaJornada));
 
         // Valido la nuevaJornada
         ErrorResponse errorDeValidacion = this.crearJornadaLaboralValidadorServicio.validarJornada(nuevaJornada);
@@ -47,7 +47,6 @@ public class JornadaLaboralControlador {
             return new ResponseEntity(errorDeValidacion, HttpStatus.BAD_REQUEST);
         }
 
-//        return ResponseEntity.ok(this.jornadaLaboralServicio.horasTrabajadasEnLaSemana(DeJornadaLaboral));
         return ResponseEntity.ok(this.jornadaLaboralServicio.addJornadaLaboral(nuevaJornada));
     }
 

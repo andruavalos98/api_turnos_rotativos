@@ -15,4 +15,5 @@ public interface JornadaLaboralRepositorio  extends JpaRepository<JornadaLaboral
     List<JornadaLaboral> findJornadaLaboralByEmpleadoIdAndFechaBetween(Integer id, LocalDate fecha1, LocalDate fecha2);
     List<JornadaLaboral> findJornadaLaboralByFechaBetween(LocalDate fecha1, LocalDate fecha2);
     JornadaLaboral findJornadaLaboralByTipoDeJornadaLaboralIdAndFecha(Integer id, LocalDate fecha);
+    List<JornadaLaboral> findJornadaLaboralByTipoDeJornadaLaboralIdAndFechaBetween(Integer id, LocalDate fecha1, LocalDate fecha2);
 }
