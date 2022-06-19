@@ -1,6 +1,5 @@
 package com.example.turnosrotativos.Servicios;
 
-import com.example.turnosrotativos.Entidades.Empleado;
 import com.example.turnosrotativos.Entidades.TipoDeJornadaLaboral;
 import com.example.turnosrotativos.Repositorios.TipoJornadaLaboralRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;

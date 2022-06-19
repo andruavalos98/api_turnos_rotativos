@@ -6,6 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TipoJornadaLaboralRepositorio  extends JpaRepository<TipoDeJornadaLaboral, Integer> {
-
     TipoDeJornadaLaboral findByNombre(String nombre);
 }

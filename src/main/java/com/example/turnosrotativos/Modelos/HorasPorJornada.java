@@ -1,7 +1,7 @@
 package com.example.turnosrotativos.Modelos;
-
-import com.example.turnosrotativos.Entidades.TipoDeJornadaLaboral;
-
+/*
+* Modelo creado para ser parte de la response al endpoint listar/horas-cargadas-por-jornada
+* */
 public class HorasPorJornada {
     private String tipoDeJornada;
     private float horas;

@@ -29,13 +29,4 @@ public class EmpleadoServicio {
 
         this.repositorio.save(empleado);
     }
-
-    public void modificarEmpleado() {
-
-    }
-
-    public void bajaEmpleado() {
-        this.entidad.setAlta(false);
-    }
-
 }

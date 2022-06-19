@@ -20,6 +20,8 @@ import static java.util.Objects.isNull;
 
 @Service
 public class CrearJornadaLaboralValidadorServicio {
+    // Por simplicidad hardcodeo el id de los tipos de actividades
+    // No es muy elegante pero funciona
     private final int ID_JORNADA_NORMAL = 4;
     private final int ID_HORAS_EXTRA = 2;
     private final int ID_VACACIONES = 5;
@@ -95,7 +97,7 @@ public class CrearJornadaLaboralValidadorServicio {
             return true;
         }
 
-        // Pbtengo los dias trabjados del empleado
+        // Obtengo los dias trabjados del empleado
         List<JornadaLaboral> jornadasLaboralesDeLaSemana = this.obtenerJornadasLaboralesDeLaSemanaParaUnEmpleado(nuevaJornada);
 
         long horasTrabajadasEnLaSemana = this.obtenerHorasTrabajadasDeUnaLista(jornadasLaboralesDeLaSemana);
