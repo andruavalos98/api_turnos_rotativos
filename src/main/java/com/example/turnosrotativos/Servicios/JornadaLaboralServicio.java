@@ -84,7 +84,7 @@ public class JornadaLaboralServicio {
         if (
                 !this.jornadaLaboralRepositorio.existsById(jornadaLaboral.getId()) ||
                 isNull(jornadaLaboral.getHoraEntrada()) ||
-                isNull(jornadaLaboral.getHoraEntrada())
+                isNull(jornadaLaboral.getHoraSalida())
         ) {
             return null;
         }
